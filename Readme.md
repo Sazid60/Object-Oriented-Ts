@@ -103,3 +103,178 @@ With this knowledge, you can confidently build complex applications that are bot
 2. Polymorphism
 3. Abstraction
 4. Encapsulation
+
+## 3-1 Class And Object
+
+#### OOP CLASS
+
+- Class is defined same as js
+- If We declare class we must have to call contractor and give the values and initialize
+
+#### Constructor
+
+- A constructor is a special function inside a class.
+- It runs automatically whenever you create a new object from the class using new
+- A constructor is a special method used to create and initialize an instance of a class.The constructor is the method.
+
+```ts
+const dog = new Animal("Doggo", "Dog", "Woof");
+```
+
+#### Initializer
+
+- An initializer is just a line of code that gives a starting value to a property.
+- Initializer isn’t a formal JavaScript keyword, but it commonly refers to code that sets the initial values of properties, this.name. The initializer is each assignment (this.property = value) inside the constructor that sets up the object’s initial state.
+
+```ts
+this.name = name;
+```
+
+- this.name means the name property of the object you're creating.
+- = name means you're setting that property to the value passed into the constructor.
+- So this.name = name is an initializer because it is setting an initial value.
+
+```ts
+//
+// OOP-CLASS
+
+class Animal {
+  name: string;
+  species: string;
+  sound: string;
+
+  //   If We declare class we must have to call contractor and give the values and initialize
+  // A constructor is a special method used to create and initialize an instance of a class.
+
+  // we will again define the type inside the contractor while giving to contractor
+  constructor(name: string, species: string, sound: string) {
+    // Initializer isn’t a formal JavaScript keyword, but it commonly refers to code that sets the initial values of properties, this.name
+    // The initializer is each assignment (this.property = value) inside the constructor that sets up the object’s initial state.
+    this.name = name;
+    this.species = species;
+    this.sound = sound;
+  }
+}
+//   to use the class we have to use new keyword
+const dog = new Animal("Persian", "Dog", "Bark");
+dog.name;
+dog.sound;
+dog.species;
+
+const cat = new Animal("Deshi", "Cat", "Bilai Mew");
+cat.name;
+cat.sound;
+cat.species;
+//
+```
+
+#### How is this working?
+
+- Create a new object using the Animal class with the new keyword
+  1. When you write new Animal("Persian", "Dog", "Bark"), you're creating a brand-new object from the Animal class.
+- Inside the Animal class, we declare the properties that every object of this class will have
+  1. These are: name, species, and sound.
+  2. They define what kind of data each Animal object will store.
+- The constructor function runs automatically when the object is created
+  1. It receives values (arguments) when you create the object — like "Persian", "Dog", and "Bark".
+- Inside the constructor, we use initializers to set the object's properties
+
+  1. this.name = name assigns the received name value ("Persian") to the object's name property.
+  2. These assignments are called initializers because they give the object its initial values.
+
+- Class contains Properties and Function Inside a Property Is Called Method. For Method we have to use normal function since in arrow function "this" do not work
+
+```ts
+//
+class Animal {
+  name: string;
+  species: string;
+  sound: string;
+
+  constructor(name: string, species: string, sound: string) {
+    this.name = name;
+    this.species = species;
+    this.sound = sound;
+  }
+
+  //   method
+  makeSound() {
+    console.log(`The ${this.name} says ${this.sound}`);
+  }
+}
+
+const dog = new Animal("Persian", "Dog", "Bark");
+
+dog.makeSound();
+
+const cat = new Animal("Deshi", "Cat", "Bilai Mew");
+cat.makeSound();
+//
+```
+
+- As all properties are publicly accessible we can use public access modifier to reduce writing code
+
+```ts
+class Animal {
+      public name: string,
+      public species: string,
+      public sound: string
+
+    constructor(
+       name: string,
+       species: string,
+       sound: string
+    ) {
+
+      this.name = name;
+      this.species = species;
+      this.sound = sound;
+    }
+
+    //   method
+    makeSound() {
+      console.log(`The ${this.name} says ${this.sound}`);
+    }
+  }
+
+  //   to use the class we have to use new keyword
+  const dog = new Animal("Persian", "Dog", "Bark");
+  dog.makeSound();
+
+  const cat = new Animal("Deshi", "Cat", "Bilai Mew");
+  cat.makeSound();
+  //
+```
+
+- Still a lot of code right? If we use Public access modifier in top of here still we have to declare inside the constructor. Still a lot of code. To solve this ts have gave us parameter properties. This means we will just write inside the constructor
+
+```ts
+class Animal {
+  constructor(
+    public name: string,
+    public species: string,
+    public sound: string
+  ) {
+    // not require to initialize since we are using parameter properties
+    //   this.name = name;
+    //   this.species = species;
+    //   this.sound = sound;
+  }
+
+  //   method
+  makeSound() {
+    console.log(`The ${this.name} says ${this.sound}`);
+  }
+}
+
+//   to use the class we have to use new keyword
+const dog = new Animal("Persian", "Dog", "Bark");
+dog.makeSound();
+
+const cat = new Animal("Deshi", "Cat", "Bilai Mew");
+cat.makeSound();
+//
+```
+
+- Using Parameter Properties gave us a lot of facilities
+  1. Will do initializing and defining the type on the top
