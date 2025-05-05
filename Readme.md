@@ -379,3 +379,75 @@ class Teacher extends Parent {
 const teacher1 = new Teacher("sazid", 20, "Uganda", "faculty");
 teacher1.takeClass(700);
 ```
+
+## 3-3 Type Narrowing Or Type Guard using Type Of and In
+
+- Type guide is like police checking me when I want to go into some restricted area. If I am allowed They will let me in if I'm not allowed they will kick me.
+- A type guard is a way to narrow down the type of a variable within a conditional block so that TypeScript knows what specific type it is dealing with.
+- In Ts Sometimes we do type guard to check if the property is string/number/boolean or other
+
+- typeof operator type guard
+
+```ts
+// Type Of Operator
+// Typeof Works in run time, since it is also present in js
+//  we will make decision based on the type
+type Alphanumeric = string | number;
+const add = (param1: Alphanumeric, param2: Alphanumeric): Alphanumeric => {
+  if (typeof param1 === "number" && typeof param2 === "number") {
+    return param1 + param2;
+  } else {
+    return param1.toString() + param2.toString();
+  }
+};
+
+const result = add(2, "2");
+
+console.log(result);
+```
+
+- In guard
+
+  1. In guard always works with object
+     ![alt text](image.png)
+
+- Being an Union Type from the object the name is accessible but the the role nis not accessible.The user parameter can be either TNormalUser or TAdminUser, and TNormalUser does not have a role property — so TypeScript can’t be sure user.role exists.
+- here comes the "In" guard with a solution like we are guarding them to access the type
+  ![alt text](image-1.png)
+
+```ts
+type TNormalUser = {
+  name: string;
+};
+type TAdminUser = {
+  name: string;
+  role: "admin";
+};
+
+const getUser = (user: TNormalUser | TAdminUser) => {
+  // user.
+  // The user parameter can be either TNormalUser or TAdminUser, and TNormalUser does not have a role property — so TypeScript can’t be sure user.role exists.
+  // here comes the "In" guard with a solution like we are guarding them to access the type
+  if ("role" in user) {
+    console.log(user.name);
+    console.log(user.role);
+    console.log(`My Name is ${user.name}, My role is ${user.role}`);
+  } else {
+    console.log(`My Name is ${user.name}, My role is User`);
+  }
+};
+const normalUser: TNormalUser = {
+  name: "Normal Bhai",
+};
+const adminUser: TAdminUser = {
+  name: "Admin Bhai",
+  role: "admin",
+};
+
+getUser(normalUser);
+getUser(adminUser);
+```
+
+- so what is the type is guard doing? The in type guard is checking if a property exists on an object, and based on that, TypeScript narrows the type.
+
+- so what do we understand? If different type of data is coming to me then we will ensure by using type guard and do the calculations
