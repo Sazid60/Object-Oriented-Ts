@@ -703,3 +703,201 @@ goribManusherAccount.addDeposit(20);
 const myBalance = goribManusherAccount.getBalance();
 console.log(myBalance);
 ```
+
+## 3-6 Getter and Setter
+
+```ts
+// getter and setter
+
+class BankAccount {
+  public readonly id: number;
+  public name: string;
+  protected _balance: number;
+
+  constructor(id: number, name: string, balance: number) {
+    this.id = id;
+    this.name = name;
+    this._balance = balance;
+  }
+  public addDeposit(amount: number) {
+    this._balance = this._balance + amount;
+  }
+  public getBalance() {
+    return this._balance;
+  }
+}
+
+class StudentAccount extends BankAccount {
+  test() {
+    this._balance;
+  }
+}
+
+const goribManusherAccount = new BankAccount(111, "Sazid", 20);
+
+console.log(goribManusherAccount);
+goribManusherAccount.addDeposit(20); //function calling
+const myBalance = goribManusherAccount.getBalance(); // function calling
+console.log(myBalance);
+```
+
+- we ar getting and setting the property by calling function. This can be done using getter and setter
+- we want to write like this "goribManusherAccount.\_balance = 20". But this balance will not overwrite, it will ook like property but work like function
+
+```ts
+// getter and setter
+
+class BankAccount {
+  public readonly id: number;
+  public name: string;
+  protected _balance: number;
+
+  constructor(id: number, name: string, balance: number) {
+    this.id = id;
+    this.name = name;
+    this._balance = balance;
+  }
+  // public addDeposit(amount: number) {
+  //   this._balance = this._balance + amount;
+  // }
+
+  // with setter
+
+  set deposit(amount: number) {
+    this._balance = this.balance + amount;
+  }
+
+  // public getBalance() {
+  //   return this._balance;
+  // }
+
+  // with getter
+  get balance() {
+    return this._balance;
+  }
+}
+
+class StudentAccount extends BankAccount {
+  test() {
+    this._balance;
+  }
+}
+
+const goribManusherAccount = new BankAccount(111, "Sazid", 20);
+
+//   console.log(goribManusherAccount);
+//   goribManusherAccount.addDeposit(20); //function calling
+//   const myBalance = goribManusherAccount.getBalance(); // function calling
+//   console.log(myBalance);
+
+//    we ar getting and setting the property by calling function. This can be done using getter and setter
+//  we want to  write like this "goribManusherAccount._balance = 20". But this balance will not overwrite, it will ook like property but work like function
+
+const myBalance = goribManusherAccount.balance;
+console.log(myBalance);
+goribManusherAccount.deposit = 10;
+console.log(goribManusherAccount.balance);
+```
+
+## 3-7 Static In OOP
+
+- Static Means That can not be changed
+- Dynamic Means That will be changed based on our activity
+
+#### In Ts Static Means In Which Memory Do Not Change
+
+- Without Static
+
+```ts
+class Counter {
+  // we are defining default value = 0 ;
+  count: number = 0;
+
+  //  In this Class there is no constructor since we are not taking any value for making class
+
+  increment() {
+    return (this.count = this.count + 1);
+  }
+  declarecrement() {
+    return (this.count = this.count - 1);
+  }
+}
+const instance1 = new Counter();
+console.log(instance1.increment()); //1 ---> allocating in different memory
+console.log(instance1.increment()); //2
+console.log(instance1.increment()); //3
+const instance2 = new Counter();
+console.log(instance2.increment()); //1 ---> Allocating In Different MEMORY
+console.log(instance2.increment()); //2
+console.log(instance2.increment()); //3
+```
+
+- There is a problem like each and every time instance is created new memory is allocated. So, This do not keep internal connection between them.
+- But we want something for all memory will be same. Statics helps us with this
+- This how Say The Counter Will be static
+
+```ts
+static count: number = 0;
+```
+
+- If we want to call any static we have to Call by the Class
+
+```ts
+// static
+
+class Counter {
+  // we are defining default value = 0 ;
+  static count: number = 0;
+
+  //  In this Class there is no constructor since we are not taking any value for making class
+
+  increment() {
+    // If we want to call any static we have to Call by the Class
+    return (Counter.count = Counter.count + 1);
+  }
+  declarecrement() {
+    return (Counter.count = Counter.count - 1);
+  }
+}
+const instance1 = new Counter();
+console.log(instance1.increment()); //1
+console.log(instance1.increment()); //2
+console.log(instance1.increment()); //3
+
+const instance2 = new Counter();
+console.log(instance2.increment()); //4
+console.log(instance2.increment()); //5
+console.log(instance2.increment()); //6
+```
+
+- We can Make a Method Static As Well
+
+```ts
+{
+  // static
+
+  class Counter {
+    static count: number = 0;
+
+    static increment() {
+      return (Counter.count = Counter.count + 1);
+    }
+    static declarecrement() {
+      return (Counter.count = Counter.count - 1);
+    }
+  }
+  console.log(Counter.increment());
+  console.log(Counter.declarecrement());
+}
+```
+
+- When you mark a method or property as **static**, it means:
+  1.  It does not belong to an instance of the class
+  2.  It belongs to the class itself.
+
+| Feature       | Non-Static                      | Static                              |
+| ------------- | ------------------------------- | ----------------------------------- |
+| Belongs to    | Each object (instance)          | The class itself                    |
+| Accessed with | `object.method()`               | `ClassName.method()`                |
+| State scope   | Each object has its own state   | One shared state for all            |
+| Use case      | When state/method is per object | When shared behavior/data is needed |
