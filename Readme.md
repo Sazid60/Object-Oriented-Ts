@@ -278,3 +278,428 @@ cat.makeSound();
 
 - Using Parameter Properties gave us a lot of facilities
   1. Will do initializing and defining the type on the top
+
+## 3-2 Inheritance In OOP
+
+- When We will Get any Property from our parents its our inherited Property
+- Same as If any class (Child) gets another class's(Parent) property or method then its called inheritance
+
+- Not using inheritance
+
+```ts
+class Student {
+  name: string;
+  age: number;
+  address: string;
+
+  constructor(name: string, age: number, address: string) {
+    this.name = name;
+    this.age = age;
+    this.address = address;
+  }
+
+  getSleep(numOfHours: number) {
+    console.log(`${this.name} will sleep for ${numOfHours}`);
+  }
+}
+
+const student1 = new Student("sazid", 20, "Uganda");
+student1.getSleep(12);
+
+class Teacher {
+  name: string;
+  age: number;
+  address: string;
+  designation: string;
+
+  constructor(name: string, age: number, address: string, designation: string) {
+    this.name = name;
+    this.age = age;
+    this.address = address;
+    this.designation = designation;
+  }
+
+  getSleep(numOfHours: number) {
+    console.log(`${this.name} will sleep for ${numOfHours}`);
+  }
+  takeClass(numOfClass: number) {
+    console.log(`${this.name} will take ${numOfClass} Class`);
+  }
+}
+
+const teacher1 = new Teacher("sazid", 20, "Uganda", "faculty");
+teacher1.takeClass(700);
+```
+
+- As We can see there the common properties in between the two classes, so we can take sahara of Inheritance
+
+```ts
+// oop inheritance
+class Parent {
+  name: string;
+  age: number;
+  address: string;
+
+  constructor(name: string, age: number, address: string) {
+    this.name = name;
+    this.age = age;
+    this.address = address;
+  }
+
+  getSleep(numOfHours: number) {
+    console.log(`${this.name} will sleep for ${numOfHours}`);
+  }
+}
+
+// we are telling that Student please extend your Father Parent class
+class Student extends Parent {
+  // though we are using parents property still we have to use constructor since its required to make object
+  constructor(name: string, age: number, address: string) {
+    // why super? This student class contractor is getting the values from where the class is created. The properties are absorbed from parent class so we have to send the received things to the parent Constructor to get the worked done using super(), since parent is the real owner.
+    super(name, age, address);
+  }
+}
+
+const student1 = new Student("sazid", 20, "Uganda");
+student1.getSleep(12);
+
+class Teacher extends Parent {
+  designation: string;
+
+  constructor(name: string, age: number, address: string, designation: string) {
+    super(name, age, address);
+    this.designation = designation;
+  }
+
+  takeClass(numOfClass: number) {
+    console.log(`${this.name} will take ${numOfClass} Class`);
+  }
+}
+
+const teacher1 = new Teacher("sazid", 20, "Uganda", "faculty");
+teacher1.takeClass(700);
+```
+
+## 3-3 Type Narrowing Or Type Guard using Type Of and In
+
+- Type guide is like police checking me when I want to go into some restricted area. If I am allowed They will let me in if I'm not allowed they will kick me.
+- A type guard is a way to narrow down the type of a variable within a conditional block so that TypeScript knows what specific type it is dealing with.
+- In Ts Sometimes we do type guard to check if the property is string/number/boolean or other
+
+- typeof operator type guard
+
+```ts
+// Type Of Operator
+// Typeof Works in run time, since it is also present in js
+//  we will make decision based on the type
+type Alphanumeric = string | number;
+const add = (param1: Alphanumeric, param2: Alphanumeric): Alphanumeric => {
+  if (typeof param1 === "number" && typeof param2 === "number") {
+    return param1 + param2;
+  } else {
+    return param1.toString() + param2.toString();
+  }
+};
+
+const result = add(2, "2");
+
+console.log(result);
+```
+
+- In guard
+
+  1. In guard always works with object
+     ![alt text](image.png)
+
+- Being an Union Type from the object the name is accessible but the the role nis not accessible.The user parameter can be either TNormalUser or TAdminUser, and TNormalUser does not have a role property — so TypeScript can’t be sure user.role exists.
+- here comes the "In" guard with a solution like we are guarding them to access the type
+  ![alt text](image-1.png)
+
+```ts
+type TNormalUser = {
+  name: string;
+};
+type TAdminUser = {
+  name: string;
+  role: "admin";
+};
+
+const getUser = (user: TNormalUser | TAdminUser) => {
+  // user.
+  // The user parameter can be either TNormalUser or TAdminUser, and TNormalUser does not have a role property — so TypeScript can’t be sure user.role exists.
+  // here comes the "In" guard with a solution like we are guarding them to access the type
+  if ("role" in user) {
+    console.log(user.name);
+    console.log(user.role);
+    console.log(`My Name is ${user.name}, My role is ${user.role}`);
+  } else {
+    console.log(`My Name is ${user.name}, My role is User`);
+  }
+};
+const normalUser: TNormalUser = {
+  name: "Normal Bhai",
+};
+const adminUser: TAdminUser = {
+  name: "Admin Bhai",
+  role: "admin",
+};
+
+getUser(normalUser);
+getUser(adminUser);
+```
+
+- so what is the type is guard doing? The in type guard is checking if a property exists on an object, and based on that, TypeScript narrows the type.
+
+- so what do we understand? If different type of data is coming to me then we will ensure by using type guard and do the calculations
+
+## 3-4 Type Guard Using Instance Of
+
+- OOP Fundamentals are object instance or class. For OOP Type guard we will use instance of operator
+- any parent class or child class be written as a type
+- after building child parent class in the function we have used the Animal class as Type. It can access the animals property not specifically cat or dog properties. Because Ts is not understanding that if the argument sent in the function is dog or cat.
+
+![alt text](image-2.png)
+
+- we have to use a guard to make Ts Understandable that the sent argument is really dog or really a cat
+- we will use instance of to since the Dog or Cat is instance of a class. we have to check Dog is which's instance and Cat is which's instance.
+  ![alt text](image-3.png)
+- Now the child class properties are accessible
+
+```ts
+ // Type Guard Using Instance Of
+  //
+
+  //   parent class
+  class Animal {
+    name: string;
+    species: string;
+
+    constructor(name: string, species: string) {
+      this.name = name;
+      this.species = species;
+    }
+
+    makeSound() {
+      console.log("I am Making Sound");
+    }
+  }
+
+  //   child class
+
+  class Dog extends Animal {
+    constructor(name: string, species: string) {
+      super(name, species);
+    }
+
+    makeBark() {
+      console.log("I am Braking");
+    }else{
+      animal.makeSound()
+    }
+  }
+  //   child class
+  class Cat extends Animal {
+    constructor(name: string, species: string) {
+      super(name, species);
+    }
+
+    makeMew() {
+      console.log("I am Mewing");
+    }
+  }
+
+  //   suppose we are making a function that will get animal
+  //  any parent class or child class be written as a type
+
+  const getAnimal = (animal: Animal) => {
+    // animal.
+    // after building child parent class in the function we have used the Animal class as Type. It can access the animals property not specifically cat or dog properties. Because Ts is not understanding that if the argument sent in the function is dog or cat.
+    // we have to use a guard to make Ts Understandable that the sent argument is really dog or really a cat
+    //  we will use instance of to since the Dog or Cat is instance of a class. we have to check Dog is which's instance and Cat is which's instance.
+
+    if(animal instanceof Dog ){
+        animal.makeBark()
+        // now accessible to all
+    }else if(animal instanceof Cat){
+        animal.makeMew()
+    }
+  };
+
+  const dog = new Dog("Kuuta", "dog");
+  const cat = new Cat("Bilui", "cat");
+
+  getAnimal(dog)
+```
+
+#### The guarding checking can be handled in smart way using function
+
+```ts
+//   parent class
+class Animal {
+  name: string;
+  species: string;
+
+  constructor(name: string, species: string) {
+    this.name = name;
+    this.species = species;
+  }
+
+  makeSound() {
+    console.log("I am Making Sound");
+  }
+}
+
+//   child class
+
+class Dog extends Animal {
+  constructor(name: string, species: string) {
+    super(name, species);
+  }
+
+  makeBark() {
+    console.log("I am Braking");
+  }
+}
+//   child class
+class Cat extends Animal {
+  constructor(name: string, species: string) {
+    super(name, species);
+  }
+
+  makeMew() {
+    console.log("I am Mewing");
+  }
+}
+
+const getAnimal = (animal: Animal) => {
+  const isCat = (animal: Animal): animal is Cat => {
+    return animal instanceof Cat;
+    // this is returning true which is good enough to satisfy the condition
+    // there is a problem since it is returning boolean and the Ts can not understand which type of animal it is.and show error
+    //  to solve this we have to specifically say its a cat or dog so that ts can understand
+  };
+  const isDog = (animal: Animal): animal is Dog => {
+    return animal instanceof Dog;
+  };
+  if (isDog(animal)) {
+    animal.makeBark();
+  } else if (isCat(animal)) {
+    animal.makeMew();
+  } else {
+    animal.makeSound();
+  }
+};
+
+const dog = new Dog("Kuuta", "dog");
+const cat = new Cat("Bilui", "cat");
+
+getAnimal(dog);
+```
+
+## 3-5 Access Modifier
+
+- We wilL Modify the Access According To Our Need
+
+- This public access modifier helps to access all the property everywhere
+
+```ts
+    public id: number;
+    public name: string;
+    public balance: number;
+```
+
+- readonly allows to see the property but do not allow to change
+- the balance should not be accessible as well . If we give read only it will not allow further change. but the balance should be changeable at the same time it should be protected so that no one can change. Its like we can see balance but can not change directly. private access modifier comes with a solution that it only allows to change within the class
+
+```ts
+    public readonly id: number;
+    public name: string;
+    private _balance: number;
+```
+
+- By default property are public
+- Final Version
+
+```ts
+//
+// Access Modifier
+// We wilL Modify the Access According To Our Need
+
+class BankAccount {
+  // public id: number;
+  // public name: string;
+  // public balance: number;
+  //This public access modifier helps to access all the property everywhere
+  // this is not also right
+  public readonly id: number;
+  // readonly allows to see the property but do not allow to change
+  public name: string;
+  // the balance should not be accessible as well . If we give read only it will not allow further change. but the balance should be changeable at the same time it should be protected so that no one can change. Its like we can see balance but can not change directly. private access modifier comes with a solution that it only allows to change within the class
+  private _balance: number;
+
+  constructor(id: number, name: string, balance: number) {
+    this.id = id;
+    this.name = name;
+    this._balance = balance;
+  }
+  // method that works to diopside new balance
+  addDeposit(amount: number) {
+    this._balance = this._balance + amount;
+  }
+  getBalance() {
+    return this._balance;
+  }
+}
+
+const goribManusherAccount = new BankAccount(111, "Sazid", 20);
+
+console.log(goribManusherAccount);
+//   goribManusherAccount.id = 20
+//   goribManusherAccount._balance = 2000
+// This is not right because no one should be able to change the properties. Here comes access Modifier.
+goribManusherAccount.addDeposit(20);
+const myBalance = goribManusherAccount.getBalance();
+console.log(myBalance);
+```
+
+- protected modifier is jat vai of private
+- When The situation is like we have to keep the balance protected from outer world but want to access into another instance that is the the child of the parent who is holding the balance we have to use "protected" instead of private since private only allows to access within the class but protected allows to access them in the instance as well
+
+```ts
+//
+class BankAccount {
+  public readonly id: number;
+  public name: string;
+  protected _balance: number;
+
+  constructor(id: number, name: string, balance: number) {
+    this.id = id;
+    this.name = name;
+    this._balance = balance;
+  }
+  //  we can ma this public too
+  public addDeposit(amount: number) {
+    this._balance = this._balance + amount;
+  }
+  //  we can ma this public too
+  public getBalance() {
+    return this._balance;
+  }
+}
+
+// When The situation is like we have to keep the balance protected from outer world but want to access into another instance that is the the child of the parent who is holding the balance we have to use "protected" instead of private since private only allows to access within the class but protected allows to access them in the instance as well
+
+class StudentAccount extends BankAccount {
+  test() {
+    this._balance;
+  }
+}
+
+const goribManusherAccount = new BankAccount(111, "Sazid", 20);
+
+console.log(goribManusherAccount);
+
+goribManusherAccount.addDeposit(20);
+const myBalance = goribManusherAccount.getBalance();
+console.log(myBalance);
+```
