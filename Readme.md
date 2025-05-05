@@ -893,7 +893,7 @@ console.log(instance2.increment()); //6
 
 - When you mark a method or property as **static**, it means:
   1.  It does not belong to an instance of the class
-  2.  It belongs to the class itself
+  2.  It belongs to the class itself.
 
 | Feature       | Non-Static                      | Static                              |
 | ------------- | ------------------------------- | ----------------------------------- |
