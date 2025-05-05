@@ -798,3 +798,106 @@ console.log(myBalance);
 goribManusherAccount.deposit = 10;
 console.log(goribManusherAccount.balance);
 ```
+
+## 3-7 Static In OOP
+
+- Static Means That can not be changed
+- Dynamic Means That will be changed based on our activity
+
+#### In Ts Static Means In Which Memory Do Not Change
+
+- Without Static
+
+```ts
+class Counter {
+  // we are defining default value = 0 ;
+  count: number = 0;
+
+  //  In this Class there is no constructor since we are not taking any value for making class
+
+  increment() {
+    return (this.count = this.count + 1);
+  }
+  declarecrement() {
+    return (this.count = this.count - 1);
+  }
+}
+const instance1 = new Counter();
+console.log(instance1.increment()); //1 ---> allocating in different memory
+console.log(instance1.increment()); //2
+console.log(instance1.increment()); //3
+const instance2 = new Counter();
+console.log(instance2.increment()); //1 ---> Allocating In Different MEMORY
+console.log(instance2.increment()); //2
+console.log(instance2.increment()); //3
+```
+
+- There is a problem like each and every time instance is created new memory is allocated. So, This do not keep internal connection between them.
+- But we want something for all memory will be same. Statics helps us with this
+- This how Say The Counter Will be static
+
+```ts
+static count: number = 0;
+```
+
+- If we want to call any static we have to Call by the Class
+
+```ts
+// static
+
+class Counter {
+  // we are defining default value = 0 ;
+  static count: number = 0;
+
+  //  In this Class there is no constructor since we are not taking any value for making class
+
+  increment() {
+    // If we want to call any static we have to Call by the Class
+    return (Counter.count = Counter.count + 1);
+  }
+  declarecrement() {
+    return (Counter.count = Counter.count - 1);
+  }
+}
+const instance1 = new Counter();
+console.log(instance1.increment()); //1
+console.log(instance1.increment()); //2
+console.log(instance1.increment()); //3
+
+const instance2 = new Counter();
+console.log(instance2.increment()); //4
+console.log(instance2.increment()); //5
+console.log(instance2.increment()); //6
+```
+
+- We can Make a Method Static As Well
+
+```ts
+{
+  // static
+
+  class Counter {
+    static count: number = 0;
+
+    static increment() {
+      return (Counter.count = Counter.count + 1);
+    }
+    static declarecrement() {
+      return (Counter.count = Counter.count - 1);
+    }
+  }
+  console.log(Counter.increment());
+  console.log(Counter.declarecrement());
+}
+```
+
+- When you mark a method or property as **static**, it means:
+  1.  It does not belong to an instance of the class
+  2.  It belongs to the class itself
+
+| Feature       | Non-Static                      | Static                              |
+| ------------- | ------------------------------- | ----------------------------------- |
+| Belongs to    | Each object (instance)          | The class itself                    |
+| Accessed with | `object.method()`               | `ClassName.method()`                |
+| State scope   | Each object has its own state   | One shared state for all            |
+| Use case      | When state/method is per object | When shared behavior/data is needed |
