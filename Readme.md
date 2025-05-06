@@ -1110,3 +1110,42 @@ class ToyotaCar extends Car1 {
 const hondaCar = new ToyotaCar();
 hondaCar.startEngine();
 ```
+
+## 3-10 Encapsulation
+
+- Encapsulation means hiding something from me. Or it can be like hiding something that its not in contact to outer world.
+
+```ts
+class BankAccount {
+  public readonly id: number;
+  public name: string;
+  protected _balance: number;
+  // private _balance:number;
+  constructor(id: number, name: string, balance: number) {
+    this.id = id;
+    this.name = name;
+    this._balance = balance;
+  }
+  public addDeposit(amount: number) {
+    this._balance = this._balance + amount;
+  }
+  public getBalance() {
+    return this._balance;
+  }
+}
+
+class StudentAccount extends BankAccount {
+  test() {
+    this._balance;
+  }
+}
+
+const goribManusherAccount = new BankAccount(111, "Sazid", 20);
+console.log(goribManusherAccount);
+goribManusherAccount.addDeposit(20);
+const myBalance = goribManusherAccount.getBalance();
+console.log(myBalance);
+```
+
+- By Using Private and Protected we have made encapsulation.
+- Its not only the property. We can make any method private or protected means encapsulated.
