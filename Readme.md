@@ -901,3 +901,212 @@ console.log(instance2.increment()); //6
 | Accessed with | `object.method()`               | `ClassName.method()`                |
 | State scope   | Each object has its own state   | One shared state for all            |
 | Use case      | When state/method is per object | When shared behavior/data is needed |
+
+## 3-8 Polymorphism
+
+- Polymorphism is the second pillar of OOP
+- If anything changes based on the situation its like Polymorphism
+- Polymorphism is when a method changes based on the place time and container and give different different output .
+
+```ts
+{
+  // Polymorphism
+  //  If anything changes based on the situation its like Polymorphism
+  // Polymorphism is when a method changes based on the place time and container.
+
+  class Person {
+    getSleep() {
+      console.log(`I am Sleeping 8 Hours Per Day`);
+    }
+  }
+
+  class Student extends Person {
+    getSleep() {
+      console.log(`I am Sleeping 7 Hours Per Day`);
+    }
+  }
+  class Developer extends Person {
+    getSleep() {
+      console.log(`I am Sleeping 6 Hours Per Day`);
+    }
+  }
+
+  const getSleepingHour = (param: Person) => {
+    param.getSleep();
+  };
+
+  const person1 = new Person();
+  const person2 = new Student();
+  const person3 = new Developer();
+
+  getSleepingHour(person1);
+  getSleepingHour(person2);
+  getSleepingHour(person3);
+}
+```
+
+- In Here The getSleep() function is changing the values based on the different classes methods. And This is called Polymorphism. Herer getSleep() is same method. So we can say if any classes particular method is re designed in another class this is called polymorphism
+
+```ts
+//    More Example
+
+class Shape {
+  getArea(): number {
+    return 0;
+  }
+}
+
+class Circle extends Shape {
+  radius: number;
+  constructor(radius: number) {
+    super();
+    this.radius = radius;
+  }
+  getArea(): number {
+    return Math.PI * this.radius * this.radius;
+  }
+}
+
+class Rectangle extends Shape {
+  width: number;
+  height: number;
+  constructor(width: number, height: number) {
+    super();
+    this.width = width;
+    this.height = height;
+  }
+  getArea(): number {
+    return this.height * this.width;
+  }
+}
+
+const getShapeArea = (param: Shape) => {
+  // param theke ami polymorphism kore call korlam get area k
+  console.log(param.getArea());
+};
+const shape = new Shape();
+const rect = new Rectangle(1, 2);
+const circle = new Circle(2);
+
+//   shape.getArea()
+//   rect.getArea()
+//   circle.getArea
+
+// console.log(shape);
+// console.log(rect);
+// console.log(circle);
+
+console.log(shape.getArea());
+// or we can use the function to log
+getShapeArea(shape);
+getShapeArea(rect);
+getShapeArea(circle);
+```
+
+## 3-9 Abstraction In OOP
+
+- It like we will not know the real thing but we will get an idea of the what is happening.
+- abstraction can be done in two ways.
+
+  1. Using Interface
+  2. Using Abstract Class
+
+- Using Interface
+
+```ts
+//Abstraction
+//  It like we will not know the real thing but we will get an idea of the what is happening.
+//    abstraction can be done in two ways.
+// 1. Using Interface
+// 2. Using Abstract Class
+
+// Using Interface
+type Vehicle1 = {
+  //  HER WE ARE JUST GETTING THE IDEA BUT WE ARE NOT UNDERSTATING WHAT BIS HAPPING INSIDER THE FUNCTION INSIDE THE CLASS
+  startEngine(): void;
+  stopEngine(): void;
+  move(): void;
+};
+//   If any Class wants to follow any structure it should use implements
+
+class Car implements Vehicle1 {
+  startEngine(): void {
+    console.log("I am Starting The engine");
+  }
+  move(): void {
+    console.log("I am Moving The Car");
+  }
+  stopEngine(): void {
+    console.log("I am Stopping The engine");
+  }
+  // ALL The type are satisfied after that we can declare whatever method we want
+  test() {
+    console.log("I am Just Testing");
+  }
+}
+
+const toyotaCar = new Car();
+toyotaCar.startEngine();
+```
+
+- now doing it using abstract class
+- Abstract class is leader class since we know we have a leader or mentor in our life and we want to be like them and follow them.
+- We can Follow an abstract class but we can not make instance from the abstract class
+- as we are using abstraction and we can not make instance from the abstract class we have to make child class and extend
+- we will not the implementation in the abstract class. we will just give the idea
+
+```ts
+//  now doing it using abstract class
+// Abstract class is leader class since we know we have a leader or mentor in our life and we want to be like them and follow them.
+
+//  So same like this we will make a class (leader) that other class will follow the leader class
+
+abstract class Car1 {
+  // startEngine(): void {
+  //   console.log("I am Starting The engine");
+  // }
+
+  // move(): void {
+  //   console.log("I am Moving The Car");
+  // }
+  // stopEngine(): void {
+  //   console.log("I am Stopping The engine");
+  // }
+  // test() {
+  //   console.log("I am Just Testing");
+  // }
+
+  // we will not the implementation in the abstract class. we will just give the idea
+  abstract startEngine(): void;
+  abstract move(): void;
+  abstract stopEngine(): void;
+  // as it is not abstract it will be absorbed in the extended class inheritably
+  test() {
+    console.log("I am Just Testing");
+  }
+}
+
+//   as we are using abstraction and we can not make instance from the abstract class we have to make child class
+class ToyotaCar extends Car1 {
+  // we can access the methods from the parent class this is inheritance
+  // startEngine(): void {
+  // }
+  //  but we do not want that e want to make polymorphism since we want to hide the real implementation. we will not the implementation in the abstract class
+  startEngine(): void {
+    console.log("I am Starting The engine");
+  }
+  move(): void {
+    console.log("I am Moving The Car");
+  }
+  stopEngine(): void {
+    console.log("I am Stopping The engine");
+  }
+}
+// We can Follow an abstract class but we can not make instance from the abstract class
+//    so this will show error
+//   const hondaCar = new Car1();
+//   hondaCar.startEngine()
+
+const hondaCar = new ToyotaCar();
+hondaCar.startEngine();
+```
